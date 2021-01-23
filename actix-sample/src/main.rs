@@ -1,4 +1,6 @@
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use dotenv::dotenv;
+use std::env;
 // use serde::Deserialize;
 // use serde::Serialize;
 use serde_json::Value;
@@ -17,8 +19,14 @@ extern crate reqwest;
 //   lat: i32,
 // }
 async fn get_data() -> Result<Value, Box<dyn std::error::Error>> {
-  let url ="https://api.openweathermap.org/data/2.5/weather?lat=33.591177&lon=130.3832587&units=metric&appid=cdfb538ba7fe64bbb6675404a4fe5a53";
-  let response = reqwest::get(url).await?.json().await?;
+  dotenv().ok();
+  let url = format!(
+    "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={key}",
+    lat = 33.591177,
+    lon = 130.3832587,
+    key = env::var("API_KEY").expect("key is not defined")
+  );
+  let response = reqwest::get(&url).await?.json().await?;
   Ok(response)
 }
 
@@ -30,7 +38,7 @@ async fn index() -> HttpResponse {
   println!("{:#?}", data);
   match data {
     Ok(data) => HttpResponse::Ok().json(data),
-    Err(err) => HttpResponse::BadRequest().json("{\"message\":\"Invailed request...\"}"),
+    Err(_err) => HttpResponse::BadRequest().json("{\"message\":\"Invailed request...\"}"),
   }
 }
 
