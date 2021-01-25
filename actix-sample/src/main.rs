@@ -30,7 +30,7 @@ async fn get_data() -> Result<Value, Box<dyn std::error::Error>> {
   Ok(response)
 }
 
-// #[get("/getjson")]
+#[get("/")]
 async fn index() -> HttpResponse {
   println!("{:#?}", "hoge");
 
@@ -55,7 +55,7 @@ async fn index3() -> impl Responder {
 async fn main() -> std::io::Result<()> {
   HttpServer::new(|| {
     App::new()
-      .route("/", web::get().to(index))
+      .service(index)
       .route("/again", web::get().to(index2))
       .service(index3) // これを追加
   })
