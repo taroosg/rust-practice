@@ -8,6 +8,7 @@ struct Todo {
   done: bool,
 }
 
+// ルーティング
 #[get("/todos/{id}")]
 async fn get_todo(web::Path(id): web::Path<u32>) -> impl Responder {
   println!("get_todo");
