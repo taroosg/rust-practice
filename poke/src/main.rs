@@ -36,13 +36,18 @@ impl Pokemon {
 
   fn attack(&self, target: &mut Pokemon, my_move: u32) {
     println!("{} の {}！", self.name, self.moves[my_move as usize].name);
-    target.damage(self.power, target.defence)
+    target.damage(self.power, target.defence, &self.moves[my_move as usize])
   }
 
-  fn damage(&mut self, power: usize, defence: usize) {
-    let param = power as i32 - defence as i32;
+  fn damage(&mut self, power: usize, defence: usize, my_move: &Move) {
+    // 最終的なダメージ
     let damage: u32;
-    if param < 0 {
+    // 命中率補正
+    let my_ass = rand::thread_rng().gen_range(0, 99);
+    // 攻撃，守備，威力から計算
+    let param =
+      ((power as f64 * (my_move.pwr as f64 / 50.0) as f64).round() - defence as f64) as u32;
+    if param < 0 || my_ass >= my_move.ass {
       damage = 0;
     } else {
       let adjust_coefficient = create_adjustment_random();
