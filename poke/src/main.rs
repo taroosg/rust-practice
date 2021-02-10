@@ -60,16 +60,18 @@ impl Pokemon {
 }
 
 fn main() {
+  // 自分のわざ
   let my_moves = [
     Move::new("たいあたり".to_string(), 30, 95),
     Move::new("10まんボルト".to_string(), 95, 100),
     Move::new("トライアタック".to_string(), 85, 100),
     Move::new("はかいこうせん".to_string(), 150, 95),
   ];
+  // 自分のポケモン
   let mut my_pokemon = Pokemon::new("Polygon".to_string(), 500, 100, 75, my_moves);
 
+  // 敵の生成
   let mut enemy = Vec::<Pokemon>::new();
-  // 敵を1-3体生成する
   let enemy_number = rand::thread_rng().gen_range(1, 4);
   for i in 0..enemy_number {
     let adjust_coefficient = create_adjustment_random();
@@ -89,8 +91,11 @@ fn main() {
   }
 
   loop {
+    // コマンドを受け取る
     let my_move = get_command(&my_pokemon.moves);
     println!("{}", my_move);
+
+    // こうげき
     my_pokemon.attack(&mut enemy[0]);
 
     // 敵の死を確認
@@ -102,6 +107,7 @@ fn main() {
       break;
     }
 
+    // 敵のこうげき
     for e in &enemy {
       e.attack(&mut my_pokemon);
     }
@@ -130,11 +136,12 @@ fn get_command(my_moves: &[Move; 4]) -> u32 {
         my_move = player_command;
         break;
       }
-      _ => println!("invailed hand {}. please try again.", player_command),
+      _ => println!("invailed command {}. please try again.", player_command),
     };
   }
   my_move
 }
+
 fn judge(my_pokemon: &Pokemon, enemy_count: usize) -> bool {
   if my_pokemon.dead {
     println!("{} は めのまえが まっくらに なった！", my_pokemon.name);
