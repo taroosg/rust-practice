@@ -45,9 +45,8 @@ impl Pokemon {
     // 命中率補正
     let my_ass = rand::thread_rng().gen_range(0, 99);
     // 攻撃，守備，威力から計算
-    let param =
-      ((power as f64 * (my_move.pwr as f64 / 50.0) as f64).round() - defence as f64) as u32;
-    if param < 0 || my_ass >= my_move.ass {
+    let param = (power as f64 * (my_move.pwr as f64 / 50.0) as f64).round() - defence as f64;
+    if param < 0.0 || my_ass >= my_move.ass {
       damage = 0;
     } else {
       let adjust_coefficient = create_adjustment_random();
