@@ -34,8 +34,8 @@ impl Pokemon {
     }
   }
 
-  fn attack(&self, target: &mut Pokemon) {
-    println!("{} の こうげき！", self.name);
+  fn attack(&self, target: &mut Pokemon, my_move: u32) {
+    println!("{} の {}！", self.name, self.moves[my_move as usize].name);
     target.damage(self.power, target.defence)
   }
 
@@ -96,7 +96,7 @@ fn main() {
     println!("{}", my_move);
 
     // こうげき
-    my_pokemon.attack(&mut enemy[0]);
+    my_pokemon.attack(&mut enemy[0], my_move);
 
     // 敵の死を確認
     if enemy[0].dead {
@@ -109,7 +109,8 @@ fn main() {
 
     // 敵のこうげき
     for e in &enemy {
-      e.attack(&mut my_pokemon);
+      let enemy_move = rand::thread_rng().gen_range(0, 4);
+      e.attack(&mut my_pokemon, enemy_move);
     }
 
     if judge(&my_pokemon, enemy.len()) {
