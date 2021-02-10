@@ -6,16 +6,31 @@ struct Pokemon {
   power: usize,
   defence: usize,
   dead: bool,
+  moves: [Move; 4],
+}
+
+#[derive(Debug)]
+struct Move {
+  name: String,
+  pwr: u32,
+  ass: u32,
+}
+
+impl Move {
+  fn new(name: String, pwr: u32, ass: u32) -> Self {
+    Move { name, pwr, ass }
+  }
 }
 
 impl Pokemon {
-  fn new(name: String, hp: isize, power: usize, defence: usize) -> Self {
+  fn new(name: String, hp: isize, power: usize, defence: usize, moves: [Move; 4]) -> Self {
     Pokemon {
       name,
       hp,
       power,
       defence,
       dead: false,
+      moves: moves,
     }
   }
 
@@ -45,22 +60,37 @@ impl Pokemon {
 }
 
 fn main() {
-  let mut my_pokemon = Pokemon::new("Polygon".to_string(), 500, 100, 75);
+  let my_moves = [
+    Move::new("たいあたり".to_string(), 30, 95),
+    Move::new("10まんボルト".to_string(), 95, 100),
+    Move::new("トライアタック".to_string(), 85, 100),
+    Move::new("はかいこうせん".to_string(), 150, 95),
+  ];
+  let mut my_pokemon = Pokemon::new("Polygon".to_string(), 500, 100, 75, my_moves);
 
   let mut enemy = Vec::<Pokemon>::new();
   // 敵を1-3体生成する
   let enemy_number = rand::thread_rng().gen_range(1, 4);
   for i in 0..enemy_number {
     let adjust_coefficient = create_adjustment_random();
+    let enemy_moves = [
+      Move::new("たいあたり".to_string(), 30, 95),
+      Move::new("ひっかく".to_string(), 40, 100),
+      Move::new("メガトンパンチ".to_string(), 80, 70),
+      Move::new("メガトンキック".to_string(), 120, 60),
+    ];
     enemy.push(Pokemon::new(
       "敵".to_string() + &(i + 1).to_string(),
       (100 as f64 * adjust_coefficient).round() as isize,
       (100 as f64 * adjust_coefficient).round() as usize,
       (50 as f64 * adjust_coefficient).round() as usize,
+      enemy_moves,
     ))
   }
 
   loop {
+    let my_move = get_command(&my_pokemon.moves);
+    println!("{}", my_move);
     my_pokemon.attack(&mut enemy[0]);
 
     // 敵の死を確認
@@ -82,6 +112,29 @@ fn main() {
   }
 }
 
+fn get_command(my_moves: &[Move; 4]) -> u32 {
+  let my_move: u32;
+  loop {
+    println!(
+      "command?? 0:{}, 1:{}, 2:{}, 3:{}",
+      my_moves[0].name, my_moves[1].name, my_moves[2].name, my_moves[3].name
+    );
+    let player_command: u32 = {
+      let mut s = String::new();
+      std::io::stdin().read_line(&mut s).unwrap();
+      s.trim_end().to_string().parse().unwrap()
+    };
+    println!("player command is {}", player_command);
+    match player_command {
+      0 | 1 | 2 | 3 => {
+        my_move = player_command;
+        break;
+      }
+      _ => println!("invailed hand {}. please try again.", player_command),
+    };
+  }
+  my_move
+}
 fn judge(my_pokemon: &Pokemon, enemy_count: usize) -> bool {
   if my_pokemon.dead {
     println!("{} は めのまえが まっくらに なった！", my_pokemon.name);
