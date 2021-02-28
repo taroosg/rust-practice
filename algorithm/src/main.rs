@@ -28,9 +28,9 @@ fn main() {
 // @のあとに.がある
 fn is_valid_email(email: String) -> bool {
   vec![
-    !email.starts_with('@'),
+    !email.starts_with("@"),
     email.split_whitespace().collect::<Vec<&str>>().len() == 1,
-    email.split('@').collect::<Vec<&str>>().len() == 2,
+    email.split("@").collect::<Vec<&str>>().len() == 2,
     email
       .split("@")
       .collect::<Vec<&str>>()
