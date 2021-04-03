@@ -67,7 +67,7 @@ fn recursive_digits_added(n: usize) -> usize {
       .to_string()
       .chars()
       .map(|c| c.to_digit(10).unwrap() as usize)
-      .collect::<Vec<usize>>()
+      .collect()
   }
   fn get_sum_from_splitted_array(number_array: &Vec<usize>) -> usize {
     number_array.iter().sum()
