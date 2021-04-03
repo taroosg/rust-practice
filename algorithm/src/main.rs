@@ -1,6 +1,6 @@
 fn main() {
   println!("Input One Line!");
-  let player_input: u32 = {
+  let player_input: usize = {
     let mut s = String::new();
     std::io::stdin().read_line(&mut s).unwrap();
     s.trim_end().to_string().parse().unwrap()
@@ -61,21 +61,21 @@ fn main() {
 // }
 
 // 数字の分割
-fn recursive_digits_added(n: u32) -> u32 {
-  fn get_splitted_array_from_number(number: u32) -> Vec<u32> {
+fn recursive_digits_added(n: usize) -> usize {
+  fn get_splitted_array_from_number(number: usize) -> Vec<usize> {
     number
       .to_string()
       .chars()
-      .map(|c| c.to_digit(10).unwrap())
-      .collect()
+      .map(|c| c.to_digit(10).unwrap() as usize)
+      .collect::<Vec<usize>>()
   }
-  fn get_sum_from_splitted_array(number_array: &Vec<u32>) -> u32 {
+  fn get_sum_from_splitted_array(number_array: &Vec<usize>) -> usize {
     number_array.iter().sum()
   }
-  fn unshift_number_to_array(number: u32, array: Vec<u32>) -> Vec<u32> {
+  fn unshift_number_to_array(number: usize, array: Vec<usize>) -> Vec<usize> {
     [number].iter().chain(&array).map(|&x| x).collect()
   }
-  fn generate_result_array(number: u32, result_array: Vec<u32>) -> Vec<u32> {
+  fn generate_result_array(number: usize, result_array: Vec<usize>) -> Vec<usize> {
     let splitted_array = get_splitted_array_from_number(number);
     let sum = get_sum_from_splitted_array(&splitted_array);
     let new_array = unshift_number_to_array(sum, result_array);
@@ -84,7 +84,7 @@ fn recursive_digits_added(n: u32) -> u32 {
       _ => return generate_result_array(sum, new_array),
     }
   }
-  let result_array: Vec<u32> = generate_result_array(n, vec![]).to_vec();
+  let result_array: Vec<usize> = generate_result_array(n, vec![]);
   match result_array.len() {
     1 => result_array.iter().sum(),
     _ => result_array.iter().skip(1).sum(),
@@ -101,7 +101,7 @@ mod tests {
     assert_eq!(recursive_digits_added(12), 3);
     assert_eq!(recursive_digits_added(98), 25);
     assert_eq!(recursive_digits_added(3528), 27);
-    // assert_eq!(recursive_digits_added(99999999999884), 132);
+    assert_eq!(recursive_digits_added(99999999999884), 132);
     assert_eq!(recursive_digits_added(5462), 25);
     assert_eq!(recursive_digits_added(45622943), 43);
     assert_eq!(recursive_digits_added(9514599), 48);
