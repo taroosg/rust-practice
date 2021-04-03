@@ -49,33 +49,42 @@ fn main() {
 // }
 
 // フィボナッチ数列（動的計画法）
-fn f(n: isize) -> isize {
-  let mut now = 1;
-  let mut p1 = 1;
-  for _ in 2..n {
-    let p2 = p1;
-    p1 = now;
-    now = p1 + p2;
-  }
-  now
-}
+// fn f(n: isize) -> isize {
+//   let mut now = 1;
+//   let mut p1 = 1;
+//   for _ in 2..n {
+//     let p2 = p1;
+//     p1 = now;
+//     now = p1 + p2;
+//   }
+//   now
+// }
 
 // 数字の分割
 fn recursive_digits_added(n: u32) -> u32 {
-  fn generate_result_array(num: u32, result_array: &mut Vec<u32>) -> &mut Vec<u32> {
-    let num_array: Vec<u32> = num
+  fn get_splitted_array_from_number(number: u32) -> Vec<u32> {
+    number
       .to_string()
       .chars()
       .map(|c| c.to_digit(10).unwrap())
-      .collect();
-    let array_sum: u32 = num_array.iter().sum();
-    result_array.insert(0, array_sum);
-    match num_array.len() {
-      1 => return result_array,
-      _ => return generate_result_array(array_sum, result_array),
+      .collect()
+  }
+  fn get_sum_from_splitted_array(number_array: &Vec<u32>) -> u32 {
+    number_array.iter().sum()
+  }
+  fn unshift_number_to_array(number: u32, array: Vec<u32>) -> Vec<u32> {
+    [number].iter().chain(&array).map(|&x| x).collect()
+  }
+  fn generate_result_array(number: u32, result_array: Vec<u32>) -> Vec<u32> {
+    let splitted_array = get_splitted_array_from_number(number);
+    let sum = get_sum_from_splitted_array(&splitted_array);
+    let new_array = unshift_number_to_array(sum, result_array);
+    match splitted_array.len() {
+      1 => return new_array,
+      _ => return generate_result_array(sum, new_array),
     }
   }
-  let result_array: Vec<u32> = generate_result_array(n, &mut vec![]).to_vec();
+  let result_array: Vec<u32> = generate_result_array(n, vec![]).to_vec();
   match result_array.len() {
     1 => result_array.iter().sum(),
     _ => result_array.iter().skip(1).sum(),
