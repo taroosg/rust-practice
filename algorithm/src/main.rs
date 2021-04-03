@@ -63,7 +63,7 @@ fn f(n: isize) -> isize {
 // 数字の分割
 fn recursive_digits_added(n: u32) -> u32 {
   let mut result_array = vec![];
-  fn a(num: u32, result_array: &mut Vec<u32>) {
+  fn generate_result_array(num: u32, result_array: &mut Vec<u32>) {
     let num_array: Vec<u32> = num
       .to_string()
       .chars()
@@ -73,10 +73,10 @@ fn recursive_digits_added(n: u32) -> u32 {
     result_array.insert(0, array_sum);
     match num_array.len() {
       1 => return,
-      _ => a(array_sum, result_array),
+      _ => generate_result_array(array_sum, result_array),
     }
   }
-  a(n, &mut result_array);
+  generate_result_array(n, &mut result_array);
   match result_array.len() {
     1 => result_array.iter().sum(),
     _ => result_array.iter().skip(1).sum(),
