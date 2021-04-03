@@ -80,8 +80,8 @@ fn recursive_digits_added(n: usize) -> usize {
     let sum = get_sum_from_splitted_array(&splitted_array);
     let new_array = unshift_number_to_array(sum, result_array);
     match splitted_array.len() {
-      1 => return new_array,
-      _ => return generate_result_array(sum, new_array),
+      1 => new_array,
+      _ => generate_result_array(sum, new_array),
     }
   }
   let result_array: Vec<usize> = generate_result_array(n, vec![]);
