@@ -10,33 +10,38 @@ fn main() {
   //   player_input,
   //   recursive_digits_added(player_input)
   // );
-  dbg!(decimal_to_binary(60));
+  dbg!(sum_of_all_primes(3));
 }
 
-// 10進数→2進数の変換
-fn decimal_to_binary(dec_number: u32) -> String {
-  fn get_quotient_divided_by_2(number: u32) -> u32 {
-    number / 2
-  }
-  fn get_surplus_divided_by_2(number: u32) -> u32 {
-    number % 2
-  }
-  fn unshift_number_to_array(number: u32, array: Vec<u32>) -> Vec<u32> {
-    [number].iter().chain(array.iter()).map(|&x| x).collect()
-  }
-  fn create_binary_array(num: u32, array: Vec<u32>) -> Vec<u32> {
-    match get_quotient_divided_by_2(num) {
-      0 => unshift_number_to_array(get_surplus_divided_by_2(num), array),
-      _ => create_binary_array(
-        get_quotient_divided_by_2(num),
-        unshift_number_to_array(get_surplus_divided_by_2(num), array),
-      ),
+// 素数のカウント
+fn sum_of_all_primes(n: u32) -> u32 {
+  // 何かが何かで割り切れるかどうかを判定する関数
+  fn is_divisible_by_some(multiplicand: u32, multiplier: u32) -> bool {
+    match multiplicand {
+      0 | 1 => false,
+      _ => match multiplier {
+        1 => true,
+        _ => match multiplicand % multiplier {
+          0 => false,
+          _ => is_divisible_by_some(multiplicand, multiplier - 1),
+        },
+      },
     }
   }
-  create_binary_array(dec_number, vec![])
-    .iter()
-    .map(|&x| x.to_string())
-    .collect()
+  // numberが素数かどうかを判定する関数
+  fn is_prime(number: u32) -> bool {
+    is_divisible_by_some(number, (number as f32).sqrt().floor() as u32)
+  }
+  // 配列内の素数のみを残す関数
+  fn create_prime_array(array: Vec<u32>) -> Vec<u32> {
+    array.iter().filter(|&x| is_prime(*x)).map(|&x| x).collect()
+  }
+  // 配列内の数を合計する関数
+  fn get_sum_of_array(array: Vec<u32>) -> u32 {
+    array.iter().sum()
+  }
+  // 0からnまでの配列を作り，素数のみの配列にし，合計値を算出
+  get_sum_of_array(create_prime_array((0..n + 1).collect()))
 }
 
 #[cfg(test)]
@@ -44,13 +49,52 @@ mod tests {
   use super::*;
   #[test]
   fn it_works() {
-    assert_eq!(decimal_to_binary(60), "111100");
-    assert_eq!(decimal_to_binary(26), "11010");
-    assert_eq!(decimal_to_binary(35), "100011");
-    assert_eq!(decimal_to_binary(100), "1100100");
-    assert_eq!(decimal_to_binary(505), "111111001");
+    assert_eq!(sum_of_all_primes(1), 0);
+    assert_eq!(sum_of_all_primes(2), 2);
+    assert_eq!(sum_of_all_primes(3), 5);
+    assert_eq!(sum_of_all_primes(100), 1060);
+    assert_eq!(sum_of_all_primes(1000), 76127);
   }
 }
+
+// 10進数→2進数の変換
+// fn decimal_to_binary(dec_number: u32) -> String {
+//   fn get_quotient_divided_by_2(number: u32) -> u32 {
+//     number / 2
+//   }
+//   fn get_surplus_divided_by_2(number: u32) -> u32 {
+//     number % 2
+//   }
+//   fn unshift_number_to_array(number: u32, array: Vec<u32>) -> Vec<u32> {
+//     [number].iter().chain(array.iter()).map(|&x| x).collect()
+//   }
+//   fn create_binary_array(number: u32, array: Vec<u32>) -> Vec<u32> {
+//     match get_quotient_divided_by_2(number) {
+//       0 => unshift_number_to_array(get_surplus_divided_by_2(number), array),
+//       _ => create_binary_array(
+//         get_quotient_divided_by_2(number),
+//         unshift_number_to_array(get_surplus_divided_by_2(number), array),
+//       ),
+//     }
+//   }
+//   fn join_array(array: Vec<u32>) -> String {
+//     array.iter().map(|&x| x.to_string()).collect()
+//   }
+//   join_array(create_binary_array(dec_number, vec![]))
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     assert_eq!(decimal_to_binary(60), "111100");
+//     assert_eq!(decimal_to_binary(26), "11010");
+//     assert_eq!(decimal_to_binary(35), "100011");
+//     assert_eq!(decimal_to_binary(100), "1100100");
+//     assert_eq!(decimal_to_binary(505), "111111001");
+//   }
+// }
 
 // 数字の分割
 // fn recursive_digits_added(n: usize) -> usize {
