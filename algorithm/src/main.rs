@@ -10,38 +10,20 @@ fn main() {
   //   player_input,
   //   recursive_digits_added(player_input)
   // );
-  dbg!(sum_of_all_primes(3));
+  println!("hello");
+  dbg!(fire_employees(
+    vec!["Donald", "Lake"],
+    vec!["Donald", "Lake"]
+  ));
 }
 
-// 素数のカウント
-fn sum_of_all_primes(n: u32) -> u32 {
-  // 何かが何かで割り切れるかどうかを判定する関数
-  fn is_divisible_by_some(multiplicand: u32, multiplier: u32) -> bool {
-    match multiplicand {
-      0 | 1 => false,
-      _ => match multiplier {
-        1 => true,
-        _ => match multiplicand % multiplier {
-          0 => false,
-          _ => is_divisible_by_some(multiplicand, multiplier - 1),
-        },
-      },
-    }
-  }
-  // numberが素数かどうかを判定する関数
-  fn is_prime(number: u32) -> bool {
-    is_divisible_by_some(number, (number as f32).sqrt().floor() as u32)
-  }
-  // 配列内の素数のみを残す関数
-  fn create_prime_array(array: Vec<u32>) -> Vec<u32> {
-    array.iter().filter(|&x| is_prime(*x)).map(|&x| x).collect()
-  }
-  // 配列内の数を合計する関数
-  fn get_sum_of_array(array: Vec<u32>) -> u32 {
-    array.iter().sum()
-  }
-  // 0からnまでの配列を作り，素数のみの配列にし，合計値を算出
-  get_sum_of_array(create_prime_array((0..n + 1).collect()))
+// 従業員の解雇
+fn fire_employees(employees: Vec<&str>, unemployed: Vec<&str>) -> Vec<String> {
+  employees
+    .iter()
+    .filter(|&x| !unemployed.contains(x))
+    .map(|&x| x.to_string())
+    .collect()
 }
 
 #[cfg(test)]
@@ -49,13 +31,79 @@ mod tests {
   use super::*;
   #[test]
   fn it_works() {
-    assert_eq!(sum_of_all_primes(1), 0);
-    assert_eq!(sum_of_all_primes(2), 2);
-    assert_eq!(sum_of_all_primes(3), 5);
-    assert_eq!(sum_of_all_primes(100), 1060);
-    assert_eq!(sum_of_all_primes(1000), 76127);
+    let empty: Vec<String> = vec![];
+    assert_eq!(
+      fire_employees(
+        vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"],
+        vec!["Donald", "Lake"]
+      ),
+      vec!["Steve", "David", "Mike", "Julian"]
+    );
+    assert_eq!(
+      fire_employees(vec!["Donald", "Lake"], vec!["Donald", "Lake"]),
+      empty
+    );
+    assert_eq!(
+      fire_employees(
+        vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"],
+        vec![]
+      ),
+      vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"]
+    );
+    assert_eq!(
+      fire_employees(
+        vec!["Mike", "Steve", "David", "Mike", "Donald", "Lake", "Julian"],
+        vec!["Mike"]
+      ),
+      vec!["Steve", "David", "Donald", "Lake", "Julian"]
+    );
   }
 }
+
+// // 素数のカウント
+// fn sum_of_all_primes(n: u32) -> u32 {
+//   // 何かが何かで割り切れるかどうかを判定する関数
+//   fn is_divisible_by_some(multiplicand: u32, multiplier: u32) -> bool {
+//     match multiplicand {
+//       0 | 1 => false,
+//       _ => match multiplier {
+//         1 => true,
+//         _ => match multiplicand % multiplier {
+//           0 => false,
+//           _ => is_divisible_by_some(multiplicand, multiplier - 1),
+//         },
+//       },
+//     }
+//   }
+//   // numberが素数かどうかを判定する関数
+//   fn is_prime(number: u32) -> bool {
+//     is_divisible_by_some(number, (number as f32).sqrt().floor() as u32)
+//   }
+//   // 配列内の素数のみを残す関数
+//   fn create_prime_array(array: Vec<u32>) -> Vec<u32> {
+//     array.iter().filter(|&x| is_prime(*x)).map(|&x| x).collect()
+//   }
+//   // 配列内の数を合計する関数
+//   fn get_sum_of_array(array: Vec<u32>) -> u32 {
+//     array.iter().sum()
+//   }
+//   // 0からnまでの配列を作り，素数のみの配列にし，合計値を算出
+//   get_sum_of_array(create_prime_array((0..n + 1).collect()))
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     main();
+//     assert_eq!(sum_of_all_primes(1), 0);
+//     assert_eq!(sum_of_all_primes(2), 2);
+//     assert_eq!(sum_of_all_primes(3), 5);
+//     assert_eq!(sum_of_all_primes(100), 1060);
+//     assert_eq!(sum_of_all_primes(1000), 76127);
+//   }
+// }
 
 // 10進数→2進数の変換
 // fn decimal_to_binary(dec_number: u32) -> String {
