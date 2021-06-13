@@ -11,54 +11,50 @@ fn main() {
   //   recursive_digits_added(player_input)
   // );
   println!("hello");
-  dbg!(fire_employees(
-    vec!["Donald", "Lake"],
-    vec!["Donald", "Lake"]
-  ));
 }
 
-// 従業員の解雇
-fn fire_employees(employees: Vec<&str>, unemployed: Vec<&str>) -> Vec<String> {
-  employees
-    .iter()
-    .filter(|&x| !unemployed.contains(x))
-    .map(|&x| x.to_string())
-    .collect()
-}
+// // 従業員の解雇
+// fn fire_employees(employees: Vec<&str>, unemployed: Vec<&str>) -> Vec<String> {
+//   employees
+//     .iter()
+//     .filter(|&x| !unemployed.contains(x))
+//     .map(|&x| x.to_string())
+//     .collect()
+// }
 
-#[cfg(test)]
-mod tests {
-  use super::*;
-  #[test]
-  fn it_works() {
-    let empty: Vec<String> = vec![];
-    assert_eq!(
-      fire_employees(
-        vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"],
-        vec!["Donald", "Lake"]
-      ),
-      vec!["Steve", "David", "Mike", "Julian"]
-    );
-    assert_eq!(
-      fire_employees(vec!["Donald", "Lake"], vec!["Donald", "Lake"]),
-      empty
-    );
-    assert_eq!(
-      fire_employees(
-        vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"],
-        vec![]
-      ),
-      vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"]
-    );
-    assert_eq!(
-      fire_employees(
-        vec!["Mike", "Steve", "David", "Mike", "Donald", "Lake", "Julian"],
-        vec!["Mike"]
-      ),
-      vec!["Steve", "David", "Donald", "Lake", "Julian"]
-    );
-  }
-}
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     let empty: Vec<String> = vec![];
+//     assert_eq!(
+//       fire_employees(
+//         vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"],
+//         vec!["Donald", "Lake"]
+//       ),
+//       vec!["Steve", "David", "Mike", "Julian"]
+//     );
+//     assert_eq!(
+//       fire_employees(vec!["Donald", "Lake"], vec!["Donald", "Lake"]),
+//       empty
+//     );
+//     assert_eq!(
+//       fire_employees(
+//         vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"],
+//         vec![]
+//       ),
+//       vec!["Steve", "David", "Mike", "Donald", "Lake", "Julian"]
+//     );
+//     assert_eq!(
+//       fire_employees(
+//         vec!["Mike", "Steve", "David", "Mike", "Donald", "Lake", "Julian"],
+//         vec!["Mike"]
+//       ),
+//       vec!["Steve", "David", "Donald", "Lake", "Julian"]
+//     );
+//   }
+// }
 
 // // 素数のカウント
 // fn sum_of_all_primes(n: u32) -> u32 {
@@ -192,8 +188,8 @@ mod tests {
 //   }
 // }
 
-// フィボナッチ数列（動的計画法）
-// fn f(n: isize) -> isize {
+// // フィボナッチ数列（動的計画法）
+// fn f(n: usize) -> usize {
 //   let mut now = 1;
 //   let mut p1 = 1;
 //   for _ in 2..n {
@@ -202,6 +198,19 @@ mod tests {
 //     now = p1 + p2;
 //   }
 //   now
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     main();
+//     assert_eq!(f(1), 1);
+//     assert_eq!(f(5), 5);
+//     assert_eq!(f(10), 55);
+//     assert_eq!(f(90), 2880067194370816120);
+//   }
 // }
 
 // // メールアドレスをチェックする関数
