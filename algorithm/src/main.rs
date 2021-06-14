@@ -10,8 +10,85 @@ fn main() {
   //   player_input,
   //   recursive_digits_added(player_input)
   // );
+  // get_number_of_1("111100");
   println!("hello");
 }
+
+fn how_many_devides(s: &str) -> usize {
+  // 文字列を配列にする関数
+  fn string_to_usize_vec(s: &str) -> Vec<usize> {
+    s.split_ascii_whitespace()
+      .collect::<Vec<_>>()
+      .iter()
+      .map(|&x| x.parse::<usize>().unwrap())
+      .collect()
+  }
+  // 配列の要素が全部2で割れるかどうか確認する関数
+  fn can_all_devide_2(array: &Vec<usize>) -> bool {
+    array.iter().all(|x| x % 2 == 0)
+  }
+  // 配列の全要素を2で割った配列をつくる関数
+  fn devide_2(array: Vec<usize>) -> Vec<usize> {
+    array.iter().map(|x| x / 2).collect()
+  }
+  // 2で割り続けて回数を出力する関数
+  fn super_devide(array: Vec<usize>, count: usize) -> usize {
+    match can_all_devide_2(&array) {
+      true => super_devide(devide_2(array), count + 1),
+      false => count,
+    }
+  }
+  super_devide(string_to_usize_vec(s), 0)
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+  #[test]
+  fn it_works() {
+    main();
+    assert_eq!(how_many_devides("12 24 16"), 2);
+    assert_eq!(how_many_devides("12 24 35"), 0);
+  }
+}
+
+// // 01文字列の中の1の個数
+// fn get_number_of_1(s: &str) -> usize {
+//   s.split("")
+//     .collect::<Vec<_>>()
+//     .iter()
+//     .map(|&x| x.to_string())
+//     .filter(|x| x == "1")
+//     .collect::<Vec<_>>()
+//     .len()
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     main();
+//     assert_eq!(get_number_of_1("111001"), 4);
+//     assert_eq!(get_number_of_1("0000"), 0);
+//   }
+// }
+
+// // 積の偶数奇数判定
+// fn judge_odd_even(a: usize, b: usize) -> String {
+//   vec!["even", "odd"][(a * b) % 2].to_string()
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     main();
+//     assert_eq!(judge_odd_even(3, 4), "even");
+//     assert_eq!(judge_odd_even(1, 21), "odd");
+//   }
+// }
 
 // // 従業員の解雇
 // fn fire_employees(employees: Vec<&str>, unemployed: Vec<&str>) -> Vec<String> {
