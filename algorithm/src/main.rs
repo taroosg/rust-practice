@@ -10,35 +10,65 @@ fn main() {
   //   player_input,
   //   recursive_digits_added(player_input)
   // );
-  // get_number_of_1("111100");
+  some_sums(10, 1, 1);
   println!("hello");
 }
 
-fn how_many_devides(s: &str) -> usize {
-  // 文字列を配列にする関数
-  fn string_to_usize_vec(s: &str) -> Vec<usize> {
-    s.split_ascii_whitespace()
-      .collect::<Vec<_>>()
+// 1からNまでの数の各桁の和がA以上B以下のものの総和を求める
+fn some_sums(n: usize, a: usize, b: usize) -> usize {
+  // 1からnまでの数値が入った配列を作成する関数
+  fn create_1_to_n_array(n: usize) -> Vec<usize> {
+    vec![0; 10]
       .iter()
-      .map(|&x| x.parse::<usize>().unwrap())
-      .collect()
+      .enumerate()
+      .map(|(i, _x)| i + 1)
+      .collect::<Vec<_>>()
   }
-  // 配列の要素が全部2で割れるかどうか確認する関数
-  fn can_all_devide_2(array: &Vec<usize>) -> bool {
-    array.iter().all(|x| x % 2 == 0)
+  // 数値の配列を文字列の配列にする関数
+  fn number_array_to_str_array(array: Vec<usize>) -> Vec<String> {
+    array.iter().map(|&x| x.to_string()).collect::<Vec<_>>()
   }
-  // 配列の全要素を2で割った配列をつくる関数
-  fn devide_2(array: Vec<usize>) -> Vec<usize> {
-    array.iter().map(|x| x / 2).collect()
+  // 文字列の配列を数値の配列にする関数
+  fn str_array_to_number_array(array: Vec<String>) -> Vec<usize> {
+    array.iter().map(|x| x.parse::<usize>().unwrap()).collect()
   }
-  // 2で割り続けて回数を出力する関数
-  fn super_devide(array: Vec<usize>, count: usize) -> usize {
-    match can_all_devide_2(&array) {
-      true => super_devide(devide_2(array), count + 1),
-      false => count,
-    }
+  // 文字列を文字列の配列にする関数
+  fn str_to_vec(s: String) -> Vec<String> {
+    s.split("")
+      .filter(|&x| x != "")
+      .map(|x| x.to_string())
+      .collect::<Vec<String>>()
   }
-  super_devide(string_to_usize_vec(s), 0)
+  // 数値の配列の和を出力する関数
+  fn get_sum(array: Vec<usize>) -> usize {
+    array.iter().sum()
+  }
+  // a以上b以下ならtrueにする関数
+  fn is_a_to_b(n: usize, a: usize, b: usize) -> bool {
+    a <= n && n <= b
+  }
+  // 1からNまでの配列をつくる
+  // 各要素を文字列の配列に変換する
+  // 全ての要素に対して各桁の和を求める
+  // 上記がA以上B以下に収まっているかどうか判定し，trueのみを残す
+  // 全部合計する
+
+  // 文字列の配列の各要素の桁の和がa以上b以下のものだけ残す関数
+  fn filter_a_to_b(array: Vec<&str>, a: usize, b: usize) -> usize {
+    dbg!(array
+      .iter()
+      .filter(|&x| is_a_to_b(
+        get_sum(str_array_to_number_array(str_to_vec(x.to_string()))),
+        a,
+        b
+      ))
+      .collect::<Vec<&&str>>());
+    // .collect::<Vec<&str>>()
+    0
+  }
+  filter_a_to_b(vec!["10", "14", "20", "20"], 1, 3);
+  // dbg!(is_a_to_b(100, 1, 9));
+  0
 }
 
 #[cfg(test)]
@@ -47,10 +77,48 @@ mod tests {
   #[test]
   fn it_works() {
     main();
-    assert_eq!(how_many_devides("12 24 16"), 2);
-    assert_eq!(how_many_devides("12 24 35"), 0);
+    assert_eq!(some_sums(20, 2, 5), 84);
   }
 }
+
+// // 2で割れる回数を出力
+// fn how_many_devides(s: &str) -> usize {
+//   // 文字列を配列にする関数
+//   fn string_to_usize_vec(s: &str) -> Vec<usize> {
+//     s.split_ascii_whitespace()
+//       .collect::<Vec<_>>()
+//       .iter()
+//       .map(|&x| x.parse::<usize>().unwrap())
+//       .collect()
+//   }
+//   // 配列の要素が全部2で割れるかどうか確認する関数
+//   fn can_all_devide_2(array: &Vec<usize>) -> bool {
+//     array.iter().all(|x| x % 2 == 0)
+//   }
+//   // 配列の全要素を2で割った配列をつくる関数
+//   fn devide_2(array: Vec<usize>) -> Vec<usize> {
+//     array.iter().map(|x| x / 2).collect()
+//   }
+//   // 2で割り続けて回数を出力する関数
+//   fn super_devide(array: Vec<usize>, count: usize) -> usize {
+//     match can_all_devide_2(&array) {
+//       true => super_devide(devide_2(array), count + 1),
+//       false => count,
+//     }
+//   }
+//   super_devide(string_to_usize_vec(s), 0)
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     main();
+//     assert_eq!(how_many_devides("12 24 16"), 2);
+//     assert_eq!(how_many_devides("12 24 35"), 0);
+//   }
+// }
 
 // // 01文字列の中の1の個数
 // fn get_number_of_1(s: &str) -> usize {
