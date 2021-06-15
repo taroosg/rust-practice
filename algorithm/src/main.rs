@@ -10,7 +10,6 @@ fn main() {
   //   player_input,
   //   recursive_digits_added(player_input)
   // );
-  some_sums(10, 1, 1);
   println!("hello");
 }
 
@@ -18,15 +17,11 @@ fn main() {
 fn some_sums(n: usize, a: usize, b: usize) -> usize {
   // 1からnまでの数値が入った配列を作成する関数
   fn create_1_to_n_array(n: usize) -> Vec<usize> {
-    vec![0; 10]
+    vec![0; n]
       .iter()
       .enumerate()
       .map(|(i, _x)| i + 1)
-      .collect::<Vec<_>>()
-  }
-  // 数値の配列を文字列の配列にする関数
-  fn number_array_to_str_array(array: Vec<usize>) -> Vec<String> {
-    array.iter().map(|&x| x.to_string()).collect::<Vec<_>>()
+      .collect::<Vec<usize>>()
   }
   // 文字列の配列を数値の配列にする関数
   fn str_array_to_number_array(array: Vec<String>) -> Vec<usize> {
@@ -47,28 +42,20 @@ fn some_sums(n: usize, a: usize, b: usize) -> usize {
   fn is_a_to_b(n: usize, a: usize, b: usize) -> bool {
     a <= n && n <= b
   }
-  // 1からNまでの配列をつくる
-  // 各要素を文字列の配列に変換する
-  // 全ての要素に対して各桁の和を求める
-  // 上記がA以上B以下に収まっているかどうか判定し，trueのみを残す
-  // 全部合計する
-
   // 文字列の配列の各要素の桁の和がa以上b以下のものだけ残す関数
-  fn filter_a_to_b(array: Vec<&str>, a: usize, b: usize) -> usize {
-    dbg!(array
+  fn filter_a_to_b(array: Vec<usize>, a: usize, b: usize) -> usize {
+    array
       .iter()
-      .filter(|&x| is_a_to_b(
-        get_sum(str_array_to_number_array(str_to_vec(x.to_string()))),
-        a,
-        b
-      ))
-      .collect::<Vec<&&str>>());
-    // .collect::<Vec<&str>>()
-    0
+      .filter(|&x| {
+        is_a_to_b(
+          get_sum(str_array_to_number_array(str_to_vec(x.to_string()))),
+          a,
+          b,
+        )
+      })
+      .sum::<usize>()
   }
-  filter_a_to_b(vec!["10", "14", "20", "20"], 1, 3);
-  // dbg!(is_a_to_b(100, 1, 9));
-  0
+  filter_a_to_b(create_1_to_n_array(n), a, b)
 }
 
 #[cfg(test)]
