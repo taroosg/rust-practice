@@ -13,49 +13,14 @@ fn main() {
   println!("hello");
 }
 
-// 1からNまでの数の各桁の和がA以上B以下のものの総和を求める
-fn some_sums(n: usize, a: usize, b: usize) -> usize {
-  // 1からnまでの数値が入った配列を作成する関数
-  fn create_1_to_n_array(n: usize) -> Vec<usize> {
-    vec![0; n]
-      .iter()
-      .enumerate()
-      .map(|(i, _x)| i + 1)
-      .collect::<Vec<usize>>()
+// 任意の正の整数に対し，偶数なら2で割る，奇数なら3倍して1足すを繰り返すと1になる．
+
+fn collatz(n: isize) -> isize {
+  match n {
+    1 => n,
+    n if n % 2 == 0 => collatz(n / 2),
+    _ => collatz(3 * n + 1),
   }
-  // 文字列の配列を数値の配列にする関数
-  fn str_array_to_number_array(array: Vec<String>) -> Vec<usize> {
-    array.iter().map(|x| x.parse::<usize>().unwrap()).collect()
-  }
-  // 文字列を文字列の配列にする関数
-  fn str_to_vec(s: String) -> Vec<String> {
-    s.split("")
-      .filter(|&x| x != "")
-      .map(|x| x.to_string())
-      .collect::<Vec<String>>()
-  }
-  // 数値の配列の和を出力する関数
-  fn get_sum(array: Vec<usize>) -> usize {
-    array.iter().sum()
-  }
-  // a以上b以下ならtrueにする関数
-  fn is_a_to_b(n: usize, a: usize, b: usize) -> bool {
-    a <= n && n <= b
-  }
-  // 文字列の配列の各要素の桁の和がa以上b以下のものだけ残す関数
-  fn filter_a_to_b(array: Vec<usize>, a: usize, b: usize) -> usize {
-    array
-      .iter()
-      .filter(|&x| {
-        is_a_to_b(
-          get_sum(str_array_to_number_array(str_to_vec(x.to_string()))),
-          a,
-          b,
-        )
-      })
-      .sum::<usize>()
-  }
-  filter_a_to_b(create_1_to_n_array(n), a, b)
 }
 
 #[cfg(test)]
@@ -64,9 +29,65 @@ mod tests {
   #[test]
   fn it_works() {
     main();
-    assert_eq!(some_sums(20, 2, 5), 84);
+    assert_eq!(collatz(2), 1);
+    assert_eq!(collatz(1), 1);
+    assert_eq!(collatz(114514), 1);
   }
 }
+// // 1からNまでの数の各桁の和がA以上B以下のものの総和を求める
+// fn some_sums(n: usize, a: usize, b: usize) -> usize {
+//   // 1からnまでの数値が入った配列を作成する関数
+//   fn create_1_to_n_array(n: usize) -> Vec<usize> {
+//     vec![0; n]
+//       .iter()
+//       .enumerate()
+//       .map(|(i, _x)| i + 1)
+//       .collect::<Vec<usize>>()
+//   }
+//   // 文字列の配列を数値の配列にする関数
+//   fn str_array_to_number_array(array: Vec<String>) -> Vec<usize> {
+//     array.iter().map(|x| x.parse::<usize>().unwrap()).collect()
+//   }
+//   // 文字列を文字列の配列にする関数
+//   fn str_to_vec(s: String) -> Vec<String> {
+//     s.split("")
+//       .filter(|&x| x != "")
+//       .map(|x| x.to_string())
+//       .collect::<Vec<String>>()
+//   }
+//   // 数値の配列の和を出力する関数
+//   fn get_sum(array: Vec<usize>) -> usize {
+//     array.iter().sum()
+//   }
+//   // a以上b以下ならtrueにする関数
+//   fn is_a_to_b(n: usize, a: usize, b: usize) -> bool {
+//     a <= n && n <= b
+//   }
+//   // 文字列の配列の各要素の桁の和がa以上b以下のものだけ残す関数
+//   fn filter_a_to_b(array: Vec<usize>, a: usize, b: usize) -> usize {
+//     array
+//       .iter()
+//       .filter(|&x| {
+//         is_a_to_b(
+//           get_sum(str_array_to_number_array(str_to_vec(x.to_string()))),
+//           a,
+//           b,
+//         )
+//       })
+//       .sum::<usize>()
+//   }
+//   filter_a_to_b(create_1_to_n_array(n), a, b)
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     main();
+//     assert_eq!(some_sums(20, 2, 5), 84);
+//   }
+// }
 
 // // 2で割れる回数を出力
 // fn how_many_devides(s: &str) -> usize {
