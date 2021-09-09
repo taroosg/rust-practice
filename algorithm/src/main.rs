@@ -13,14 +13,35 @@ fn main() {
   println!("hello");
 }
 
-// 任意の正の整数に対し，偶数なら2で割る，奇数なら3倍して1足すを繰り返すと1になる．
-
-fn collatz(n: isize) -> isize {
-  match n {
-    1 => n,
-    n if n % 2 == 0 => collatz(n / 2),
-    _ => collatz(3 * n + 1),
+// 素因数分解
+fn prime_factorization(n: usize) -> Vec<usize> {
+  fn push_number_to_array(number: usize, array: Vec<usize>) -> Vec<usize> {
+    array.iter().chain([number].iter()).map(|&x| x).collect()
   }
+
+  fn is_larger_than_sqrt_devident(dividend: usize, divisor: usize) -> bool {
+    let dividend_f64: f64 = dividend as f64;
+    let divisor_f64: f64 = divisor as f64;
+    divisor_f64 >= dividend_f64.sqrt()
+  }
+
+  fn get_prime_number_array(dividend: usize, divisor: usize, result: Vec<usize>) -> Vec<usize> {
+    match dividend {
+      1 => result,
+      _ => match dividend % divisor {
+        0 => get_prime_number_array(
+          dividend / divisor,
+          divisor,
+          push_number_to_array(divisor, result),
+        ),
+        _ => match is_larger_than_sqrt_devident(dividend, divisor) {
+          true => push_number_to_array(dividend, result),
+          false => get_prime_number_array(dividend, divisor + 1, result),
+        },
+      },
+    }
+  }
+  get_prime_number_array(n, 2, vec![])
 }
 
 #[cfg(test)]
@@ -29,11 +50,35 @@ mod tests {
   #[test]
   fn it_works() {
     main();
-    assert_eq!(collatz(2), 1);
-    assert_eq!(collatz(1), 1);
-    assert_eq!(collatz(114514), 1);
+    assert_eq!(prime_factorization(10), [2, 5]);
+    assert_eq!(prime_factorization(111), [3, 37]);
+    assert_eq!(prime_factorization(256), [2, 2, 2, 2, 2, 2, 2, 2]);
+    assert_eq!(prime_factorization(1192), [2, 2, 2, 149]);
+    assert_eq!(prime_factorization(114514), [2, 31, 1847]);
   }
 }
+
+// 任意の正の整数に対し，偶数なら2で割る，奇数なら3倍して1足すを繰り返すと1になる．
+
+// fn collatz(n: isize) -> isize {
+//   match n {
+//     1 => n,
+//     n if n % 2 == 0 => collatz(n / 2),
+//     _ => collatz(3 * n + 1),
+//   }
+// }
+
+// #[cfg(test)]
+// mod tests {
+//   use super::*;
+//   #[test]
+//   fn it_works() {
+//     main();
+//     assert_eq!(collatz(2), 1);
+//     assert_eq!(collatz(1), 1);
+//     assert_eq!(collatz(114514), 1);
+//   }
+// }
 // // 1からNまでの数の各桁の和がA以上B以下のものの総和を求める
 // fn some_sums(n: usize, a: usize, b: usize) -> usize {
 //   // 1からnまでの数値が入った配列を作成する関数
