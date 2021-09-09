@@ -19,10 +19,8 @@ fn prime_factorization(n: usize) -> Vec<usize> {
     array.iter().chain([number].iter()).map(|&x| x).collect()
   }
 
-  fn is_larger_than_sqrt_devident(dividend: usize, divisor: usize) -> bool {
-    let dividend_f64: f64 = dividend as f64;
-    let divisor_f64: f64 = divisor as f64;
-    divisor_f64 >= dividend_f64.sqrt()
+  fn is_divisor_larger_than_sqrt_dividend(dividend: usize, divisor: usize) -> bool {
+    divisor as f64 >= (dividend as f64).sqrt()
   }
 
   fn get_prime_number_array(dividend: usize, divisor: usize, result: Vec<usize>) -> Vec<usize> {
@@ -34,7 +32,7 @@ fn prime_factorization(n: usize) -> Vec<usize> {
           divisor,
           push_number_to_array(divisor, result),
         ),
-        _ => match is_larger_than_sqrt_devident(dividend, divisor) {
+        _ => match is_divisor_larger_than_sqrt_dividend(dividend, divisor) {
           true => push_number_to_array(dividend, result),
           false => get_prime_number_array(dividend, divisor + 1, result),
         },
